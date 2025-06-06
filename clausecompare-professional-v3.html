@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClauseCompare Professional v3 - Legal Document Comparison</title>
+    <meta name="description" content="Professional legal document comparison with surgical precision redlines">
+    
+    <style>
+        /* Professional Legal UI */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: #2c3e50;
+        }
+        
+        .container { 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 { 
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        
+        .header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .main-content {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        
+        .input-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .input-group {
+            background: #f8f9fc;
+            border-radius: 12px;
+            padding: 25px;
+            border: 2px solid #e3e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .input-group:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+        
+        .input-group h3 {
+            color: #34495e;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 250px;
+            border: 2px solid #e3e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Cascadia Code', 'Consolas', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+            background: white;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .controls {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            box-shadow: 0 4px 15px rgba(149, 165, 166, 0.3);
+        }
+        
+        .results {
+            background: white;
+            border: 2px solid #e3e8f0;
+            border-radius: 12px;
+            padding: 30px;
+            min-height: 300px;
+            font-family: 'Georgia', serif;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+        
+        .results h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            border-bottom: 3px solid #ecf0f1;
+            padding-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Professional Redline Styles */
+        .deleted { 
+            background: linear-gradient(120deg, #ffebee 0%, #fce4ec 100%);
+            color: #c62828;
+            text-decoration: line-through;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+            border-left: 4px solid #e53935;
+            margin: 0 2px;
+            display: inline-block;
+        }
+        
+        .added { 
+            background: linear-gradient(120deg, #e8f5e8 0%, #f1f8e9 100%);
+            color: #2e7d32;
+            text-decoration: underline;
+            text-decoration-color: #4caf50;
+            text-decoration-thickness: 2px;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+            border-left: 4px solid #43a047;
+            margin: 0 2px;
+            display: inline-block;
+        }
+        
+        .moved {
+            background: linear-gradient(120deg, #e3f2fd 0%, #f3e5f5 100%);
+            color: #1565c0;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+            border-left: 4px solid #1976d2;
+            margin: 0 2px;
+            display: inline-block;
+        }
+        
+        .summary {
+            margin-top: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fc 0%, #e3e8f0 100%);
+            border-radius: 8px;
+            border-left: 5px solid #667eea;
+            font-size: 14px;
+            color: #5a6c7d;
+        }
+        
+        .placeholder {
+            color: #95a5a6;
+            font-style: italic;
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .status-ready { background: #d4edda; color: #155724; }
+        .status-processing { background: #fff3cd; color: #856404; }
+        .status-complete { background: #cce5ff; color: #004085; }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .input-section {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .header h1 { font-size: 2rem; }
+            .main-content { padding: 25px; }
+            textarea { height: 200px; }
+        }
+        
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚖️ ClauseCompare Professional v3</h1>
+            <p class="subtitle">Advanced Legal Document Comparison with Intelligent Phrase Recognition</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="input-section">
+                <div class="input-group">
+                    <h3>📄 Original Version <span id="orig-status" class="status-indicator status-ready">Ready</span></h3>
+                    <textarea id="original" placeholder="Paste your original legal text here..."></textarea>
+                </div>
+                
+                <div class="input-group">
+                    <h3>📝 Revised Version <span id="rev-status" class="status-indicator status-ready">Ready</span></h3>
+                    <textarea id="revised" placeholder="Paste your revised legal text here..."></textarea>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <button class="btn" onclick="compareDocuments()" id="compare-btn">
+                    🔍 Generate Professional Redline
+                </button>
+                <button class="btn btn-secondary" onclick="clearAll()">
+                    🗑️ Clear All
+                </button>
+            </div>
+            
+            <div class="results">
+                <h3>📄 Professional Redline Output <span id="result-status" class="status-indicator status-ready">Awaiting Input</span></h3>
+                <div id="redline-output" class="placeholder">
+                    Ready to generate professional-grade redlines with intelligent legal phrase recognition...<br><br>
+                    ✅ <strong style="color: #c62828;">Red strikethrough</strong> = deleted text<br>
+                    ✅ <strong style="color: #2e7d32;">Green underline</strong> = added text<br>
+                    ✅ <strong style="color: #1565c0;">Blue highlight</strong> = moved text<br>
+                    🎯 <strong>Professional Quality:</strong> Intelligent legal phrase recognition
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Professional Legal Document Comparison Engine v3
+        // Completely rebuilt for intelligent legal phrase recognition
+        
+        class ProfessionalLegalComparisonV3 {
+            constructor() {
+                // Comprehensive legal phrase patterns
+                this.legalPhrases = {
+                    'including but not limited to': 'including without limitation',
+                    'including without limitation': 'including but not limited to',
+                    'means any and all': 'shall mean any and all',
+                    'shall mean': 'means',
+                    'means': 'shall mean',
+                    'representations and warranties': 'reps and warranties',
+                    'to the extent': 'insofar as',
+                    'provided that': 'provided, however, that',
+                    'subject to': 'conditioned upon'
+                };
+                
+                // Legal synonym pairs
+                this.legalSynonyms = [
+                    ['shall', 'must', 'will'],
+                    ['means', 'shall mean'],
+                    ['represents', 'represents and warrants'],
+                    ['including but not limited to', 'including without limitation', 'including'],
+                    ['hereunder', 'under this agreement', 'pursuant to this agreement'],
+                    ['hereof', 'of this agreement'],
+                    ['herein', 'in this agreement']
+                ];
+                
+                // Legal numbering patterns
+                this.numberingPatterns = [
+                    { pattern: /\([a-z]\)/g, type: 'letter_paren' },     // (a), (b), (c)
+                    { pattern: /\([ivx]+\)/g, type: 'roman_paren' },     // (i), (ii), (iii)
+                    { pattern: /\([0-9]+\)/g, type: 'number_paren' },    // (1), (2), (3)
+                    { pattern: /[0-9]+\./g, type: 'number_period' },     // 1., 2., 3.
+                    { pattern: /[A-Z]\./g, type: 'letter_period' }       // A., B., C.
+                ];
+            }
+            
+            // Main comparison function
+            compare(original, revised) {
+                console.log('🔍 Starting Professional Legal Comparison v3');
+                
+                // Step 1: Intelligent preprocessing
+                const origProcessed = this.intelligentPreprocess(original);
+                const revProcessed = this.intelligentPreprocess(revised);
+                
+                console.log('Preprocessed Original:', origProcessed);
+                console.log('Preprocessed Revised:', revProcessed);
+                
+                // Step 2: Extract semantic chunks (legal phrases, sentences, clauses)
+                const origChunks = this.extractLegalChunks(origProcessed);
+                const revChunks = this.extractLegalChunks(revProcessed);
+                
+                console.log('Original chunks:', origChunks);
+                console.log('Revised chunks:', revChunks);
+                
+                // Step 3: Intelligent alignment with legal awareness
+                const alignment = this.intelligentAlignment(origChunks, revChunks);
+                
+                console.log('Alignment result:', alignment);
+                
+                return alignment;
+            }
+            
+            intelligentPreprocess(text) {
+                // Clean and normalize while preserving legal meaning
+                let processed = text.trim();
+                
+                // Normalize quotes and punctuation
+                processed = processed.replace(/[""'']/g, '"');
+                processed = processed.replace(/[–—]/g, '-');
+                
+                // Normalize spacing
+                processed = processed.replace(/\s+/g, ' ');
+                processed = processed.replace(/\s*([.,:;!?])\s*/g, '$1 ');
+                processed = processed.replace(/\s*\(\s*/g, ' (');
+                processed = processed.replace(/\s*\)\s*/g, ') ');
+                
+                return processed.trim();
+            }
+            
+            extractLegalChunks(text) {
+                const chunks = [];
+                
+                // Strategy: Look for legal phrases first, then fall back to words
+                let remaining = text;
+                let position = 0;
+                
+                while (remaining.length > 0) {
+                    // Check for legal phrases at current position
+                    const phraseMatch = this.findLegalPhraseAtPosition(remaining);
+                    
+                    if (phraseMatch) {
+                        // Add any text before the phrase
+                        if (phraseMatch.start > 0) {
+                            const beforePhrase = remaining.substring(0, phraseMatch.start).trim();
+                            if (beforePhrase) {
+                                chunks.push(...this.tokenizeNormalText(beforePhrase));
+                            }
+                        }
+                        
+                        // Add the legal phrase as a single chunk
+                        chunks.push({
+                            type: 'legal_phrase',
+                            text: phraseMatch.phrase,
+                            normalized: phraseMatch.phrase.toLowerCase()
+                        });
+                        
+                        // Continue with remaining text
+                        remaining = remaining.substring(phraseMatch.start + phraseMatch.phrase.length);
+                    } else {
+                        // No legal phrases found, tokenize the rest normally
+                        chunks.push(...this.tokenizeNormalText(remaining));
+                        break;
+                    }
+                }
+                
+                return chunks;
+            }
+            
+            findLegalPhraseAtPosition(text) {
+                const lowerText = text.toLowerCase();
+                
+                // Check each legal phrase
+                for (const phrase of Object.keys(this.legalPhrases)) {
+                    const index = lowerText.indexOf(phrase);
+                    if (index !== -1) {
+                        return {
+                            phrase: text.substring(index, index + phrase.length),
+                            start: index
+                        };
+                    }
+                }
+                
+                return null;
+            }
+            
+            tokenizeNormalText(text) {
+                // Split into words and spaces, preserving structure
+                const tokens = [];
+                const parts = text.split(/(\s+)/);
+                
+                for (const part of parts) {
+                    if (part.trim()) {
+                        tokens.push({
+                            type: 'word',
+                            text: part,
+                            normalized: part.toLowerCase().replace(/[^\w]/g, '')
+                        });
+                    } else {
+                        tokens.push({
+                            type: 'space',
+                            text: part,
+                            normalized: ' '
+                        });
+                    }
+                }
+                
+                return tokens;
+            }
+            
+            intelligentAlignment(origChunks, revChunks) {
+                const result = [];
+                let i = 0, j = 0;
+                
+                while (i < origChunks.length || j < revChunks.length) {
+                    if (i >= origChunks.length) {
+                        // Only revised chunks left
+                        result.push({ type: 'added', text: revChunks[j].text });
+                        j++;
+                    } else if (j >= revChunks.length) {
+                        // Only original chunks left
+                        result.push({ type: 'deleted', text: origChunks[i].text });
+                        i++;
+                    } else {
+                        // Compare current chunks
+                        const origChunk = origChunks[i];
+                        const revChunk = revChunks[j];
+                        
+                        if (this.chunksMatch(origChunk, revChunk)) {
+                            // Chunks match - keep the revised version
+                            result.push({ type: 'normal', text: revChunk.text });
+                            i++; j++;
+                        } else if (this.areEquivalentLegalPhrases(origChunk, revChunk)) {
+                            // Legal equivalents - show as substitution
+                            result.push({ type: 'deleted', text: origChunk.text });
+                            result.push({ type: 'added', text: revChunk.text });
+                            i++; j++;
+                        } else {
+                            // Look ahead for better alignment
+                            const alignment = this.findBestAlignment(origChunks, revChunks, i, j);
+                            
+                            if (alignment) {
+                                // Process the alignment
+                                for (let k = i; k < alignment.origIndex; k++) {
+                                    result.push({ type: 'deleted', text: origChunks[k].text });
+                                }
+                                for (let k = j; k < alignment.revIndex; k++) {
+                                    result.push({ type: 'added', text: revChunks[k].text });
+                                }
+                                result.push({ type: 'normal', text: origChunks[alignment.origIndex].text });
+                                
+                                i = alignment.origIndex + 1;
+                                j = alignment.revIndex + 1;
+                            } else {
+                                // No good alignment - treat as substitution
+                                result.push({ type: 'deleted', text: origChunk.text });
+                                result.push({ type: 'added', text: revChunk.text });
+                                i++; j++;
+                            }
+                        }
+                    }
+                }
+                
+                return result;
+            }
+            
+            chunksMatch(chunk1, chunk2) {
+                // Exact match
+                if (chunk1.text === chunk2.text) return true;
+                
+                // Normalized match
+                if (chunk1.normalized === chunk2.normalized) return true;
+                
+                // Space tokens
+                if (chunk1.type === 'space' && chunk2.type === 'space') return true;
+                
+                return false;
+            }
+            
+            areEquivalentLegalPhrases(chunk1, chunk2) {
+                // Check if chunks are equivalent legal phrases
+                if (chunk1.type === 'legal_phrase' && chunk2.type === 'legal_phrase') {
+                    const phrase1 = chunk1.normalized;
+                    const phrase2 = chunk2.normalized;
+                    
+                    return this.legalPhrases[phrase1] === phrase2 || 
+                           this.legalPhrases[phrase2] === phrase1;
+                }
+                
+                // Check if they're legal synonyms
+                if (chunk1.type === 'word' && chunk2.type === 'word') {
+                    return this.areLegalSynonyms(chunk1.normalized, chunk2.normalized);
+                }
+                
+                return false;
+            }
+            
+            areLegalSynonyms(word1, word2) {
+                for (const synonymGroup of this.legalSynonyms) {
+                    if (synonymGroup.includes(word1) && synonymGroup.includes(word2)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            
+            findBestAlignment(origChunks, revChunks, startI, startJ) {
+                const lookAhead = 10; // How far to look ahead
+                
+                for (let i = startI; i < Math.min(startI + lookAhead, origChunks.length); i++) {
+                    for (let j = startJ; j < Math.min(startJ + lookAhead, revChunks.length); j++) {
+                        if (this.chunksMatch(origChunks[i], revChunks[j])) {
+                            return { origIndex: i, revIndex: j };
+                        }
+                    }
+                }
+                
+                return null;
+            }
+        }
+        
+        // Global comparison engine instance
+        const comparisonEngine = new ProfessionalLegalComparisonV3();
+        
+        function compareDocuments() {
+            const originalText = document.getElementById('original').value;
+            const revisedText = document.getElementById('revised').value;
+            
+            if (!originalText.trim() || !revisedText.trim()) {
+                alert('⚠️ Please enter text in both document fields');
+                return;
+            }
+            
+            // Update UI to show processing
+            const compareBtn = document.getElementById('compare-btn');
+            const originalBtn = compareBtn.innerHTML;
+            compareBtn.innerHTML = '<span class="loading"></span>Processing...';
+            compareBtn.disabled = true;
+            
+            document.getElementById('result-status').textContent = 'Processing';
+            document.getElementById('result-status').className = 'status-indicator status-processing';
+            
+            // Process comparison (with small delay for UI update)
+            setTimeout(() => {
+                try {
+                    const diff = comparisonEngine.compare(originalText, revisedText);
+                    displayProfessionalRedline(diff);
+                    
+                    // Update status
+                    document.getElementById('result-status').textContent = 'Complete';
+                    document.getElementById('result-status').className = 'status-indicator status-complete';
+                    
+                } catch (error) {
+                    console.error('Comparison error:', error);
+                    document.getElementById('redline-output').innerHTML = 
+                        '<span style="color: #e74c3c;">⚠️ An error occurred during comparison. Please try again.</span>';
+                } finally {
+                    // Reset button
+                    compareBtn.innerHTML = originalBtn;
+                    compareBtn.disabled = false;
+                }
+            }, 100);
+        }
+        
+        function displayProfessionalRedline(diff) {
+            const output = document.getElementById('redline-output');
+            let html = '';
+            
+            // Generate clean professional output
+            diff.forEach(item => {
+                const text = item.text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                
+                switch (item.type) {
+                    case 'deleted':
+                        html += `<span class="deleted">${text}</span>`;
+                        break;
+                    case 'added':
+                        html += `<span class="added">${text}</span>`;
+                        break;
+                    case 'moved':
+                        html += `<span class="moved">${text}</span>`;
+                        break;
+                    default:
+                        html += text;
+                }
+            });
+            
+            // Add professional summary
+            const deletions = diff.filter(d => d.type === 'deleted').length;
+            const additions = diff.filter(d => d.type === 'added').length;
+            const moves = diff.filter(d => d.type === 'moved').length;
+            
+            if (deletions === 0 && additions === 0 && moves === 0) {
+                output.innerHTML = '✅ <strong>No changes detected</strong> - documents are identical.';
+            } else {
+                output.innerHTML = html + 
+                    `<div class="summary">
+                        📊 <strong>Professional Analysis Summary:</strong><br>
+                        • ${deletions} deletion${deletions !== 1 ? 's' : ''}<br>
+                        • ${additions} addition${additions !== 1 ? 's' : ''}<br>
+                        • ${moves} moved section${moves !== 1 ? 's' : ''}<br>
+                        <em>Analysis completed with intelligent legal phrase recognition</em>
+                    </div>`;
+            }
+        }
+        
+        function clearAll() {
+            document.getElementById('original').value = '';
+            document.getElementById('revised').value = '';
+            document.getElementById('redline-output').innerHTML = `
+                <span class="placeholder">
+                    Ready to generate professional-grade redlines with intelligent legal phrase recognition...<br><br>
+                    ✅ <strong style="color: #c62828;">Red strikethrough</strong> = deleted text<br>
+                    ✅ <strong style="color: #2e7d32;">Green underline</strong> = added text<br>
+                    ✅ <strong style="color: #1565c0;">Blue highlight</strong> = moved text<br>
+                    🎯 <strong>Professional Quality:</strong> Intelligent legal phrase recognition
+                </span>
+            `;
+            
+            // Reset status indicators
+            document.getElementById('result-status').textContent = 'Awaiting Input';
+            document.getElementById('result-status').className = 'status-indicator status-ready';
+        }
+        
+        // Auto-focus on first textarea when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('original').focus();
+        });
+    </script>
+</body>
+</html>
